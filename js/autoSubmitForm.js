@@ -7,7 +7,8 @@ jQuery.widget("ui.autoSubmitForm", {
     // default options
     options: {
         // targetId: the element whose content is replaced
-        timeout: 2000
+        timeout: 2000,
+        selective: false
         // submitUrl: the request url
     },
 
@@ -18,12 +19,20 @@ jQuery.widget("ui.autoSubmitForm", {
         /*
         console.log(this.element);            // Firebug console
         console.log(this.options.submitUrl);  // Firebug console
-        console.log(this.options.targetId);   // Firebug console */
+        console.log(this.options.targetId);   // Firebug console 
+        console.log(this.options.selective);  // Firebug console */
 
+        if (this.options.selective) {
+            jQuery(this.element).on('keyup', 'input.autosubmit:text, textarea.autosubmit', function (e) {self.filter(); });
+            jQuery(this.element).on('change', 'select.autosubmit', function (e) {self.filter(); });
+            jQuery(this.element).on('click', 'input.autosubmit:checkbox, input.autosubmit:radio', function (e) {self.filter(); });
+        } else {
+            jQuery(this.element).on('keyup', 'input:text, textarea', function (e) {self.filter(); });
+            jQuery(this.element).on('change', 'select', function (e) {self.filter(); });
+            jQuery(this.element).on('click', 'input:checkbox, input:radio', function (e) {self.filter(); });
+        }
         // Bind the events
-        jQuery('input:text, textarea', this.element).keyup(function (e) {self.filter(); });
-        jQuery('select', this.element).change(function (e) {self.filter(); });
-        jQuery('input:checkbox, input:radio', this.element).click(function (e) {self.filter(); });
+        
 
         // Set the initial value
         this.lastQuery = this.value();
