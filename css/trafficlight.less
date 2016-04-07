@@ -63,32 +63,59 @@ div.loading {
 }
 
 .traject {
-    &.panel {
-        border: 0px;
-        border-top: 1px solid @brand-primary;
-        margin-bottom:40px;
-        border-radius: 0;
-        .box-shadow(0 0px 0px rgba(0,0,0,.0));
-        .panel-title {
-            text-transform: uppercase;
-            font-size: @font-size-h3;
-            color: @headings-color;
+    .progress {
+        width: 25em;
+        margin-top: -1.5em;
+        margin-bottom: 0em;
+        .drop-shadow();
+        .border-radius(5px);
+
+        .progress-bar {
+            opacity: .75;
+            font-weight: bold;
+        }
+
+        .progress-bar-success {
+            background-color: @brand-success;            
+        }
+        .progress-bar-warning {
+            background-color: @brand-warning;
+        }
+        .progress-bar-danger {
+            background-color: @brand-danger;
         }
     }
-    
+
+    &.panel {
+        margin-bottom: 1.5em;
+    }
+
     .panel-heading {
-        .cursor-hand();
+        padding: 15px 10px;		
+
+        .title {
+            .cursor-hand();
+            text-transform: uppercase;
+        }
 
         .panel-title {
-            margin-left: 1.5em;
+            font-size: 1.5em;
+            text-transform: none;
         }
 
         .editIcon {
-            font-size: 2em;
-            margin-top: -1.2em;
-            
-            a {
-                color: @headings-color;
+            font-size: 1.5em;
+            margin-top: -1.3em;
+        }
+
+        .otherOrg {
+            font-style: italic;
+            font-size: .66em;
+            text-transform: none;
+
+            .deleteIcon {
+                margin-top: -.3em;
+                font-size: 1.5em;
             }
         }
     }
@@ -112,6 +139,7 @@ div.loading {
         }
         h4 {
             .cursor-hand();
+            line-height: .8em;
             height:42px;
             span {
                 padding-right:5px;
@@ -124,6 +152,7 @@ div.loading {
         }
 
         width: 250px;
+        border: 1px solid @brand-secondary;
         background-color: #fff;
         padding: 10px 10px 0 10px;
         margin-right: 20px;
@@ -149,9 +178,11 @@ div.loading {
                 color: @state-info-text;
                 text-align: center;
                 width:100%;
+                opacity: .75;
                 // .drop-shadow();
                 .cursor-hand();
                 div {
+                    /*background-color: @brand-secondary-25p;*/
                     padding: 2px;
                     .border-radius(5px);
                     margin-bottom: 11px;
@@ -220,7 +251,20 @@ div.loading {
                 .cursor-hand();
                 .add-colors-in-zp();	// _mixins.less where the colors are defined
                 background-color: whitesmoke !important;
+
+                img.icon {
+                    margin-left: .5em;
+                    float: right;
+                }
             }
         }
+    }    
+}
+
+.modal-dialog {
+    /*width: 600px;*/
+    width: 90%;
+    .modal-body { 
+        overflow: auto;
     }
 }
