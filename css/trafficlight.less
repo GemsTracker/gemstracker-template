@@ -76,7 +76,7 @@ div.loading {
         }
 
         .progress-bar-success {
-            background-color: @brand-success;            
+            background-color: @brand-success;
         }
         .progress-bar-warning {
             background-color: @brand-warning;
@@ -91,16 +91,21 @@ div.loading {
     }
 
     .panel-heading {
-        padding: 15px 10px;		
+        padding: 15px 10px;
 
-        .title {
-            .cursor-hand();
-            text-transform: uppercase;
-        }
+		.title {
+			.cursor-hand();
+			    text-transform: uppercase;
+		}
 
         .panel-title {
             font-size: 1.5em;
             text-transform: none;
+                        
+            .fa-fw.icon-danger { 
+                color: #b90000; 
+                margin-left: -(18em / 14);
+            }
         }
 
         .editIcon {
@@ -108,17 +113,20 @@ div.loading {
             margin-top: -1.3em;
         }
 
-        .otherOrg {
+        .description, .otherOrg {
             font-style: italic;
-            font-size: .66em;
-            text-transform: none;
+			font-size: .66em;
+			text-transform: none;
 
-            .deleteIcon {
-                margin-top: -.3em;
-                font-size: 1.5em;
-            }
+			.deleteIcon {
+			    margin-top: -.3em;
+				font-size: 1.5em;
+			}
         }
+
+        .description { display: inline-block; }
     }
+
     .panel-body {
         padding: 20px 0px;
         overflow: hidden;
@@ -164,6 +172,7 @@ div.loading {
             }
             border-top: 1px solid @brand-primary;
             padding: 10px 0 0 0;
+            clear: both;
             h5 {
                 .cursor-hand();
                 padding-bottom: 7px; //10px;
@@ -252,13 +261,37 @@ div.loading {
                 .add-colors-in-zp();	// _mixins.less where the colors are defined
                 background-color: whitesmoke !important;
 
-                img.icon {
-                    margin-left: .5em;
+                float: left;
+                width: 100%;
+
+                .tools {
+                    .dropdown-menu {
+                        z-index: @zindex-tooltip+10;    // Make sure we go over the tooltip
+                    }
+                    width: 1.2em;
                     float: right;
+                    line-height: 1.5em;
+                    margin-left: .5em;
+
+                    .dropdown .fa.dropdown-toggle {
+                        color: transparent;
+                        font-size: 1.1em;
+                    }
+                    .dropdown .fa.dropdown-toggle:hover,
+                    .dropdown.open .fa.dropdown-toggle {
+                        color: @state-info-text;
+                    }
+
+                    img.icon {
+                        margin-left: .5em;
+                        float: right;
+                    }
                 }
             }
         }
-    }    
+    }
+
+    &.deleted { opacity: .7; }
 }
 
 .modal-dialog {
