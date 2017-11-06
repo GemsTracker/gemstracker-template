@@ -196,20 +196,20 @@ $(".traject .panel-heading h3 span.title").click(function () {
         // Close all days
         headerObj.next().find(".actor").each(function () {
             if ($(this).find(".zpitems").is(":visible")) {
-                $(this).find("h5").click();
+                $(this).find("h6").click();
             }
         });
         // Scroll to today
         headerObj.next().find(".object.today").each(function () {
             // Open current day
-            $(this).find(".actor h5 span").each(function () {
+            $(this).find(".actor h6 span").each(function () {
                 if ($(this).hasClass("fa-plus-square")) {
                     $(this).parent().click();
                 }
             });
             $(this).children(".actor").each(function () {
                 if ($(this).find(".zplegenda").is(":visible")) {
-                    $(this).find("h4").click();
+                    $(this).find("h5").click();
                 }
             });
             // Scroll to today
@@ -221,17 +221,17 @@ $(".traject .panel-heading h3 span.title").click(function () {
 });
 
 // Click day
-$(".object h4").click(function () {
-    if ($(this).parent().find(".actor h5 span").first().hasClass("fa-minus-square")) {
+$(".object h5").click(function () {
+    if ($(this).parent().find(".actor h6 span").first().hasClass("fa-minus-square")) {
         // First is open, now close first and all others
-        $(this).parent().find(".actor h5 span").each(function () {
+        $(this).parent().find(".actor h6 span").each(function () {
             if ($(this).hasClass("fa-minus-square")) {
                 $(this).parent().click();
             }
         });
     } else {
         // First is closed, now open first and all others
-        $(this).parent().find(".actor h5 span").each(function () {
+        $(this).parent().find(".actor h6 span").each(function () {
             if ($(this).hasClass("fa-plus-square")) {
                 $(this).parent().click();
             }
@@ -240,7 +240,7 @@ $(".object h4").click(function () {
 });
 
 // Click actor
-$(".actor h5").click(function () {
+$(".actor h6").click(function () {
     if ($(this).find("span").first().hasClass("fa-plus-square")) {
         $(this).find("span").removeClass("fa-plus-square").addClass("fa-minus-square");
         $(this).parent().find(".zplegenda").toggle(false);
@@ -255,7 +255,7 @@ $(".actor h5").click(function () {
 // Click legend
 $(".actor .zplegenda").click(function () {
     // delegate to actor
-    $(this).parent().find("h5").click();
+    $(this).parent().find("h6").click();
 });
 
 // Initially hide all zpitems so only zplegende remains visible
