@@ -6,10 +6,11 @@ jQuery.widget("ui.autoSubmitForm", {
 
     // default options
     options: {
-        // targetId: the element whose content is replaced
-        timeout: 2000,
-        selective: false
-        // submitUrl: the request url
+        selective: false, // When true only elements having an CSS class autosubmit trigger auto submit
+        sequential: true, // When true, waits for completion of previous request before sending next request
+        // submitUrl: the request url,
+        // targetId: the element whose content is replaced,
+        timeout: 2000
     },
 
     _init: function () {
@@ -19,20 +20,21 @@ jQuery.widget("ui.autoSubmitForm", {
         /*
         console.log(this.element);            // Firebug console
         console.log(this.options.submitUrl);  // Firebug console
-        console.log(this.options.targetId);   // Firebug console 
+        console.log(this.options.targetId);   // Firebug console
         console.log(this.options.selective);  // Firebug console */
 
+        // Bind the events
         if (this.options.selective) {
+            jQuery(this.element).on('input', 'input.autosubmit:text, textarea.autosubmit', function (e) {self.filter(); });
             jQuery(this.element).on('keyup', 'input.autosubmit:text, textarea.autosubmit', function (e) {self.filter(); });
-            jQuery(this.element).on('change', 'select.autosubmit', function (e) {self.filter(); });
+            jQuery(this.element).on('change', 'textarea.autosubmit, select.autosubmit', function (e) {self.filter(); });
             jQuery(this.element).on('click', 'input.autosubmit:checkbox, input.autosubmit:radio', function (e) {self.filter(); });
         } else {
+            jQuery(this.element).on('input', 'input:text, textarea', function (e) {self.filter(); });
             jQuery(this.element).on('keyup', 'input:text, textarea', function (e) {self.filter(); });
             jQuery(this.element).on('change', 'select', function (e) {self.filter(); });
             jQuery(this.element).on('click', 'input:checkbox, input:radio', function (e) {self.filter(); });
         }
-        // Bind the events
-        
 
         // Set the initial value
         this.lastQuery = this.value();
@@ -70,34 +72,41 @@ jQuery.widget("ui.autoSubmitForm", {
         "use strict";
         var postData, self;
 
-        //If we have a pending request and want to create a new one, cancel the first
-        this.destroy();
+        postData = this.value();
+
+        // Prevent double dipping when e.g. the arrow keys were used.
+        if (jQuery.param(postData) == jQuery.param(this.lastQuery)) {
+            // console.log('no input change');
+            return;
+        }
+        if (this.options.sequential) {
+            if (this.request !== null) {
+                return;
+            }
+        } else {
+            //If we have a pending request and want to create a new one, cancel the first
+            this.destroy();
+        }
 
         if (this.request === null) {
-
             // var name = this.options.elementName ? this.options.elementName : this.element.attr('name');
 
-            postData = this.value();
-
             if (this.options.targetId && this.options.submitUrl) {
-                // Prevent double dipping when e.g. the arrow keys were used.
-                if (jQuery.param(postData) !== jQuery.param(this.lastQuery)) {
-                    this.lastQuery = postData;
-                    //console.log(postData);
+                this.lastQuery = postData;
+                //console.log(postData);
 
-                    //*
-                    self = this;
-                    this.request = jQuery.ajax({
-                        url: this.options.submitUrl,
-                        type: "POST",
-                        dataType: "html",
-                        data: postData,
-                        error: function (request, status, error) {self.error(request, status); },
-                        complete: function (request, status) {self.complete(request, status); },
-                        success: function (data, status, request) {self.success(data, status, request); }
-                    });
-                    // */
-                }
+                //*
+                self = this;
+                this.request = jQuery.ajax({
+                    url: this.options.submitUrl,
+                    type: "POST",
+                    dataType: "html",
+                    data: postData,
+                    error: function (request, status, error) {self.error(request, status); },
+                    complete: function (request, status) {self.complete(request, status); },
+                    success: function (data, status, request) {self.success(data, status, request); }
+                });
+                // */
             }
         }
     },
