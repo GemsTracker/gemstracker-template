@@ -122,7 +122,7 @@ require:
     if (options.constructor == Object) {
       !$this.data(parentDataName) && $this.data(parentDataName, $this.parent());
 
-      if ($msgbox.size() < 1) {
+      if ($msgbox.length < 1) {
         create();
       }
       createButton();
