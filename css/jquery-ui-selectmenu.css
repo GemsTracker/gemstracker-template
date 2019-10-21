@@ -1,0 +1,33 @@
+.overflow {
+	max-height: 395px;
+}
+option.avatar {
+	background-repeat: no-repeat !important;
+	padding-left: 20px;
+}
+.avatar .ui-icon {
+	background-position: left top;
+}
+.ui-selectmenu-button .ui-selectmenu-button-closed {
+	background: #ffffff;
+}
+.ui-corner-all {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+.ui-button,
+.ui-button:hover,
+.ui-button:focus {
+	background: #ffffff;
+	color: #555555;
+	height: 34px;
+	padding-right: 0px;
+}
+.ui-selectmenu-text {
+	padding-top: 2px;
+}
+.ui-selectmenu-icon.ui-icon {
+	margin-top: 2px;
+}
