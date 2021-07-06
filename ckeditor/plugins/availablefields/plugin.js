@@ -47,18 +47,22 @@ CKEDITOR.plugins.add('availablefields',
 			{
 				// Header
 				this.startGroup(editor.config.availablefieldsLabel);
+				var displayValue = (typeof editor.config.availablefieldsDisplay !== 'undefined' && 'value' == editor.config.availablefieldsDisplay);
 				
 				for (var property in strings) {
 					var label = String(strings[property]);
-					if (label == 'null') {
+					if (label == 'null' || label == null) {
 						label = property;
 					}
 
 					// Param1: What gets inserted
 					// Param2: What is shown in the dropdown
 					// Param3: What is shown as title on hover in the dropdown
-
-					this.add(property, property, String(label));
+					if (displayValue) {
+						this.add(property, String(label), property);
+					} else {
+						this.add(property, property, String(label));
+					}
 				}
 			},
 

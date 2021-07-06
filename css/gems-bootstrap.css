@@ -1,3 +1,17 @@
+/*
+ * This file contains mixins that can be shared to all other templates. 
+ * Each mixin should have a little header to explain how to use it
+ */
+/*
+ * Create a linear vertical gradient background between start and endcolor, with 
+ * special IE compatible inline image using base64encode custom function
+ * @see MUtil_Less_View_Helper_HeadLink
+ */
+/* ROUNDED CORNERS */
+/* All corners */
+/* Just the top */
+/* Only the bottom */
+/* Create a box shadow for 3-d effect */
 #header {
   background: url(../../basic/local/pulse.gif) repeat-x 400px bottom;
 }
@@ -11,4 +25,6 @@
   -webkit-box-shadow: 1px 1px 2px black;
   box-shadow: 1px 1px 2px black;
   margin-bottom: 2px;
+  /* Make sure we see the bottom */
 }
+/*# sourceMappingURL=gems-bootstrap.css.map */

@@ -1,5 +1,5 @@
 {
-	"availabel_fields": {
+	"available_fields": {
 		"Email": "{email}",
 		"First name": "{first_name}",
 		"Full name": "{full_name}",
