@@ -1,0 +1,22 @@
+/* 
+    Created on : Jul 29, 2016, Jul 29, 2016 8:17:52 AM
+    Author     : Menno Dekker <menno.dekker@erasmusmc.nl>
+*/
+table.browser > tbody > tr.ui-sortable-handle {
+  /* 
+            In our tables we first have a show button, then the sort order
+            When sorting, the order is no longer important, only confusing so 
+            just make it transparent
+        */
+}
+table.browser > tbody > tr.ui-sortable-handle:hover > td {
+  cursor: move;
+}
+table.browser > tbody > tr.ui-sortable-handle > *:nth-child(2) {
+  color: transparent;
+}
+table.browser > tbody > tr.ui-sortable-placeholder > td {
+  height: 4em;
+  background: yellow;
+}
+/*# sourceMappingURL=jqueryui-sortable.css.map */

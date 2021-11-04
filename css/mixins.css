@@ -1,0 +1,15 @@
+/*
+ * This file contains mixins that can be shared to all other templates. 
+ * Each mixin should have a little header to explain how to use it
+ */
+/*
+ * Create a linear vertical gradient background between start and endcolor, with 
+ * special IE compatible inline image using base64encode custom function
+ * @see MUtil_Less_View_Helper_HeadLink
+ */
+/* ROUNDED CORNERS */
+/* All corners */
+/* Just the top */
+/* Only the bottom */
+/* Create a box shadow for 3-d effect */
+/*# sourceMappingURL=mixins.css.map */

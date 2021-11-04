@@ -1,4 +1,6 @@
  //http://bootstrap.ourjs.com/#dialog
+
+// DEPRECATED, replace by gem,s.trafficlight.js and other gems. scripts in 1.9.2
  
  /* Extend string method */
 
