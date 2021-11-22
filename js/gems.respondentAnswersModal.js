@@ -53,7 +53,7 @@ jQuery(document).ready(function () {
             var bodyChildren = body.children(":visible");
             bodyChildren.css("visibility", "hidden");
 
-            body.append("<div id=''" + printContainerId + "' style='position: absolute; left: 0; top: 0; visibility: visible'></div>");
+            body.append("<div id='" + printContainerId + "' style='position: absolute; left: 0; top: 0; visibility: visible;'></div>");
             var printContainer = body.find("#" + printContainerId);
 
             printContainer.html(modalBody.html());
