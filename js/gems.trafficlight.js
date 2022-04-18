@@ -8,10 +8,10 @@ function setCookie(key, value) {
     document.cookie = key + "=" + value + ";expires=" + expires.toUTCString();
 }
 
-// function getCookie(key) {
-//     var keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
-//     return keyValue ? keyValue[2] : null;
-// }
+function getCookie(key) {
+    var keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
+    return keyValue ? keyValue[2] : null;
+}
 
 function getURLParameter(url, name) {
     return (RegExp("/" + name + "/" + "(.+?)(/|$)").exec(url) || [, null])[1];
@@ -56,6 +56,10 @@ $(".actor h6").click(function () {
         $(this).find("span").removeClass("fa-plus-square").addClass("fa-minus-square");
         $(this).parent().find(".zplegenda").toggle(false);
         $(this).parent().find(".zpitems").toggle(true);
+        
+        var href = $(this).parent().find('.tokenwrapper .tools a').first().attr('href');
+
+        setCookie("last_token_id", getURLParameter(href, 'id'));
     } else {
         $(this).find("span").addClass("fa-plus-square").removeClass("fa-minus-square");
         $(this).parent().find(".zplegenda").toggle(true);
@@ -72,3 +76,11 @@ $(".actor .zplegenda").click(function () {
 // Initially hide all zpitems so only zplegende remains visible
 $(".object .actor").children(".zpitems").toggle(false);
 
+var lastToken = getCookie("last_token_id");
+if (lastToken) {
+    $(".actor .tokenwrapper .tools a").each(function () {
+        if(lastToken == getURLParameter(this.href, 'id')) {
+            $(this).parents().eq(5).find('h6').click();
+        }
+    });
+}
