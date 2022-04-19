@@ -19,7 +19,7 @@ function getURLParameter(url, name) {
 // End utility functions
 
 // Make sure the last clicked track id is remembered
-jQuery(".traject .panel-heading h3 span.title").click(function () {
+$(".traject .panel-heading h3 span.title").click(function () {
     var headerObj = jQuery(this).parent().parent();
     // As this function is called before the item is made visible, check for not visivle 
     if (! headerObj.next().is(":visible")) {
@@ -73,14 +73,21 @@ $(".actor .zplegenda").click(function () {
     $(this).parent().find("h6").click();
 });
 
-// Initially hide all zpitems so only zplegende remains visible
-$(".object .actor").children(".zpitems").toggle(false);
+jQuery(document).ready(function() {
+    // Initially hide all zpitems so only zplegende remains visible
+    $(".object .actor").children(".zpitems").toggle(false);
 
-var lastToken = getCookie("last_token_id");
-if (lastToken) {
-    $(".actor .tokenwrapper .tools a").each(function () {
-        if(lastToken == getURLParameter(this.href, 'id')) {
-            $(this).parents().eq(5).find('h6').click();
-        }
-    });
-}
+    var lastToken = getCookie("last_token_id");
+    // Open last clicked item
+    if (lastToken) {
+        $(".actor .tokenwrapper .tools a").each(function () {
+            if (lastToken == getURLParameter(this.href, 'id')) {
+                var h6 = $(this).parents().eq(5).find('h6');
+                if (h6.find("span").first().hasClass("fa-plus-square")) {
+                    // console.log(lastToken);
+                    h6.click();
+                }
+            }
+        });
+    }
+});
