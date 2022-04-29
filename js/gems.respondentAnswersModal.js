@@ -1,7 +1,7 @@
 /*jslint browser: true*/
 /*global jQuery */
 
-jQuery(document).ready(function () {
+function activateLoadInline() {
     // Inline answers + printing dialog
     jQuery("a.inline-answers").click(function(e){
         e.preventDefault();
@@ -45,7 +45,6 @@ jQuery(document).ready(function () {
             jQuery(this).append("<button id='print-button' class='actionlink btn print'>Print</button>");
         });
 
-
         modal.on("click", ".btn.print", function(e) {
             var modalBody  = jQuery("#modal").find(".modal-body");
             var printContainerId = "print-answers";
@@ -67,8 +66,8 @@ jQuery(document).ready(function () {
             printContainer.remove();
             body.css("visibility", "visible");
             bodyChildren.css("visibility", "visible");
-
         });
-
     });
-});
+}
+
+jQuery(document).ready(activateLoadInline);

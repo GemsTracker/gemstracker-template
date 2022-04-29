@@ -2,26 +2,36 @@
 /*global jQuery */
 
 jQuery(document).ready(function() {
-    var imageSource = (function(scripts) {
-        var scripts = document.getElementsByTagName('script'),
-            script = scripts[scripts.length - 1];
+    var imageSource = (function() {
+        var scripts = document.getElementsByTagName('script');
 
-        if (script.getAttribute.length !== undefined) {
-            return script.src.split('/').slice(0,-2).join('/');
+        for (i = 0; i < scripts.length; i++) {
+            if (undefined !== scripts[i].getAttribute) {
+                var src = scripts[i].getAttribute('src');
+                if (src && src.includes('copyToClipboard.js')) {
+                    // console.log(scripts[i].getAttribute('src', -1).split('/').slice(0,-2).join('/'));
+                    return scripts[i].getAttribute('src', -1).split('/').slice(0,-2).join('/');
+                }
+            }
         }
-
-        return script.getAttribute('src', -1).split('/').slice(0,-2).join('/');
     }());
 
-    function copyToClipboard(html) {
+    function copyToClipboard(html) 
+    {
+        var text = jQuery(html).text();
+
+        if ('INPUT' == html.tagName) {
+            text = html.getAttribute('value');
+        }
+
         if (!navigator.clipboard) {
-            fallbackCopyTextToClipboard(jQuery(html).text());
+            fallbackCopyTextToClipboard(text);
             return;
         }
         if (navigator.clipboard.write) {
             data = createClipboardItem({
                 "text/html": '<html><body>' + jQuery(html)[0].outerHTML + '</body></html>',
-                "text/plain": jQuery(html).text().trim()
+                "text/plain": text
             });
             navigator.clipboard.write([data]).then(function() {
                 console.log('Async: Copying to clipboard was successful!');
@@ -33,7 +43,7 @@ jQuery(document).ready(function() {
             });;
             return;
         }
-        navigator.clipboard.writeText(jQuery(html).text().trim()).then(function() {
+        navigator.clipboard.writeText(text).then(function() {
             console.log('Async: Copying to clipboard was successful!');
         }, function(err) {
             console.error('Async: Could not copy text: ', err);
@@ -79,17 +89,66 @@ jQuery(document).ready(function() {
         document.body.removeChild(textArea);
     }
 
-    jQuery('.copy-to-clipboard').before(
-        '<img src="' + imageSource + '/images/copy.svg" width="20px" class="copier-to-clipboard" />'
-    );
+    function makeCopyButton(source, extraClass)
+    {
+        var alt = source.getAttribute('data-copy-title');
+        if (! alt) {
+            alt = source.getAttribute('title');
+        }
+        if (! alt) {
+            alt = source.getAttribute('alt');
+        }
+        if (! alt) {
+            alt = "Copy to clipboard";
+        }
+        if (! extraClass) {
+            extraClass = '';
+        }
+        return '<img src="' + imageSource + '/images/copy.svg" width="20px" class="copier-to-clipboard ' + extraClass + '" data-clipboard-target-id="' + source.getAttribute('id') + '" alt="' + alt + '" title="' + alt + '"/>';
+    }
 
-    jQuery('.copier-to-clipboard').attr({'alt': "Copy to clipboard", 'title': "Copy to clipboard"});
+    /**
+     * Create image buttons for classes asking for buttons  
+     **/
+    jQuery('.copy-to-clipboard-after').after(function () {
+        return makeCopyButton(this, 'copier-after');
+    });
+    jQuery('.copy-to-clipboard-before').before(function () {
+        return makeCopyButton(this, 'copier-before');
+    });
+    jQuery('.copy-to-clipboard-inside').append(function () {
+        return makeCopyButton(this, 'copier-inside');
+    });
+
+    // The actual copy object function
     jQuery('.copier-to-clipboard').click(function () {
         $self = this;
-        $self.src = imageSource + '/images/copied.svg';
-        copyToClipboard(jQuery($self).next());
-        setTimeout(function (){
-            $self.src = imageSource + '/images/copy.svg';
-        }, 1000); // Restore image after 1000 ms.
+        if ('img' == $self.tagName) {
+            // Animate image click
+            $self.src = imageSource + '/images/copied.svg';
+            
+            setTimeout(function () {
+                $self.src = imageSource + '/images/copy.svg';
+            }, 1000); // Restore image after 1000 ms.
+        }
+        if ($self.getAttribute && $self.getAttribute('data-clipboard-text')) {
+            // console.log($self.getAttribute('data-clipboard-text'));
+            fallbackCopyTextToClipboard($self.getAttribute('data-clipboard-text'));
+        } else {
+            var target = document.getElementById($self.getAttribute('data-clipboard-target-id'));
+            if (!target) {
+                if ($self.getAttribute && $self.getAttribute('class').includes('copier-after')) {
+                    target = $self.previousSibling;
+                } else if ($self.getAttribute && $self.getAttribute('class').includes('copier-before')) {
+                    target = $self.nextSibling;
+                } else if ($self.getAttribute && $self.getAttribute('class').includes('copier-inside')) { 
+                    target = $self.parentElement;
+                }
+            }
+            // console.log(target);
+            if (target) {
+                copyToClipboard(target);
+            }
+        }
     });
 }); // */
