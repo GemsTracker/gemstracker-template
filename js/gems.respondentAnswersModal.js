@@ -43,6 +43,8 @@ function activateLoadInline() {
 
         modalBody.load(jQuery(this).attr("href"), function() {
             jQuery(this).append("<button id='print-button' class='actionlink btn print'>Print</button>");
+            jQuery('a.actionlink.btn', this).addClass('inline-answers');
+            activateLoadInline();
         });
 
         modal.on("click", ".btn.print", function(e) {
