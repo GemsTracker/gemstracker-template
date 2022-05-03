@@ -5,6 +5,9 @@ function activateLoadInline() {
     // Inline answers + printing dialog
     jQuery("a.inline-answers").click(function(e){
         e.preventDefault();
+        // Voorkom dat dubbele eventlisteners meerdere keren gaan laden
+        e.stopImmediatePropagation();
+
 
         var modal = jQuery("#modal");
         if (0 === modal.length) {
@@ -43,11 +46,15 @@ function activateLoadInline() {
 
         modalBody.load(jQuery(this).attr("href"), function() {
             jQuery(this).append("<button id='print-button' class='actionlink btn print'>Print</button>");
-            jQuery('a.actionlink.btn', this).addClass('inline-answers');
+            // Zorg dat alle knoppen inline laden, behalve de PDF knop (Erasmus specifiek)
+            jQuery('a.actionlink.btn:not(:contains(\'PDF\'))', this).addClass('inline-answers');
             activateLoadInline();
         });
 
         modal.on("click", ".btn.print", function(e) {
+            // Voorkom dat dubbele eventlisteners meerdere keren gaan printen
+            e.stopImmediatePropagation();
+            
             var modalBody  = jQuery("#modal").find(".modal-body");
             var printContainerId = "print-answers";
             var body = jQuery("body");
