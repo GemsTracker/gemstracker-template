@@ -3,8 +3,10 @@
 
 function activateLoadInline() {
     // Inline answers + printing dialog
+    jQuery("a.inline-answers").unbind('click');
     jQuery("a.inline-answers").click(function(e){
         e.preventDefault();
+        e.stopImmediatePropagation();
 
         var modal = jQuery("#modal");
         if (0 === modal.length) {

@@ -130,6 +130,23 @@ jQuery(document).ready(function() {
             setTimeout(function () {
                 $self.src = imageSource + '/images/copy.svg';
             }, 1000); // Restore image after 1000 ms.
+        } else {
+            var origTitle = $self.getAttribute('title');
+            var newTitle  = "Copied"
+
+            if ($self.getAttribute('data-original-title')) {
+                origTitle = $self.getAttribute('data-original-title');
+            }
+            if ($self.getAttribute('data-clipboard-after')) {
+                newTitle = $self.getAttribute('data-clipboard-after');
+            }
+            $self.setAttribute('title', newTitle);
+            jQuery($self).tooltip('fixTitle').tooltip('show');
+
+            setTimeout(function () {
+                $self.setAttribute('title', origTitle);
+                jQuery($self).tooltip('fixTitle');
+            }, 1000); // Restore tooltip after 1000 ms, newTitle will remain visible until mouseout
         }
         if ($self.getAttribute && $self.getAttribute('data-clipboard-text')) {
             // console.log($self.getAttribute('data-clipboard-text'));
