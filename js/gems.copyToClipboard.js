@@ -1,7 +1,9 @@
 /*jslint browser: true*/
 /*global jQuery */
 
-jQuery(document).ready(function() {
+function enableCopyToClipboard() {
+    var copyId = 1001;
+
     var imageSource = (function() {
         var scripts = document.getElementsByTagName('script');
 
@@ -15,42 +17,59 @@ jQuery(document).ready(function() {
             }
         }
     }());
-
-    function copyToClipboard(html) 
+    
+    function copyToClipboard(element) 
     {
-        var text = jQuery(html).text();
+        var html = '<html><body>' + element.outerHTML + '</body></html>'
+        var text = jQuery(element).text();
+        
 
-        if ('INPUT' == html.tagName) {
+        if ('INPUT' == element.tagName) {
             text = html.getAttribute('value');
         }
+        if ('TABLE' == element.tagName) {
+            var text = "";
+            jQuery('tr', element).each(function () {
+                jQuery('td', this).each(function () {
+                    text += jQuery(this).text().trim() + "\t";
+                });
+                text.trimEnd();
+                text += "\n";
+            });
+        }
+        
+        // console.log(element, html, text);
 
         if (!navigator.clipboard) {
-            fallbackCopyTextToClipboard(text);
+            fallbackCopyTextToClipboard(html, text);
             return;
         }
         if (navigator.clipboard.write) {
             data = createClipboardItem({
-                "text/html": '<html><body>' + jQuery(html)[0].outerHTML + '</body></html>',
-                "text/plain": text
+                "text/plain": text,
+                "text/html": html
             });
             navigator.clipboard.write([data]).then(function() {
                 console.log('Async: Copying to clipboard was successful!');
-            }, function(err) {
-                console.error('Async: Could not copy text: ', err);
+            }).catch(function(error) {
+                console.error('Async: Could not copy text: ', error);
 
                 // Try the fallback
-                fallbackCopyTextToClipboard(jQuery(html).text().trim());
-            });;
+                fallbackCopyTextToClipboard(html, text);
+            });
             return;
         }
+        fallbackCopyTextToClipboard(html, text);
+        
+        /* Alternative (fallback works in FireFox)
         navigator.clipboard.writeText(text).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
+            console.log('Async: Copying of text to clipboard was successful!');
         }, function(err) {
             console.error('Async: Could not copy text: ', err);
 
             // Try the fallback
-            fallbackCopyTextToClipboard(jQuery(html).text().trim());
-        });
+            fallbackCopyTextToClipboard(html, text);
+        });  // */
     }
     
     function createClipboardItem(type2data)
@@ -65,28 +84,17 @@ jQuery(document).ready(function() {
         return new ClipboardItem(output);
     }
 
-    function fallbackCopyTextToClipboard(text) {
-        var textArea = document.createElement("textarea");
-        textArea.value = text;
-
-        // Avoid scrolling to bottom
-        textArea.style.top = "0";
-        textArea.style.left = "0";
-        textArea.style.position = "fixed";
-
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Fallback: Copying text command was ' + msg);
-        } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
+    function fallbackCopyTextToClipboard(html, text)
+    {
+        function listener(e) {
+            e.clipboardData.setData("text/html", html);
+            e.clipboardData.setData("text/plain", text);
+            e.preventDefault();
         }
-
-        document.body.removeChild(textArea);
+        document.addEventListener("copy", listener);
+        document.execCommand("copy");
+        document.removeEventListener("copy", listener);
+        console.log('Copied to clipboard!');
     }
 
     function makeCopyButton(source, extraClass)
@@ -104,7 +112,12 @@ jQuery(document).ready(function() {
         if (! extraClass) {
             extraClass = '';
         }
-        return '<img src="' + imageSource + '/images/copy.svg" width="20px" class="copier-to-clipboard ' + extraClass + '" data-clipboard-target-id="' + source.getAttribute('id') + '" alt="' + alt + '" title="' + alt + '"/>';
+        var id = source.getAttribute('id');
+        if (null == id) {
+            id = 'copyId' + copyId++;
+            source.setAttribute('id', id);
+        }
+        return '<img src="' + imageSource + '/images/copy.svg" width="20px" class="copier-to-clipboard ' + extraClass + '" data-clipboard-target-id="' + id + '" alt="' + alt + '" title="' + alt + '"/>';
     }
 
     /**
@@ -153,19 +166,12 @@ jQuery(document).ready(function() {
             fallbackCopyTextToClipboard($self.getAttribute('data-clipboard-text'));
         } else {
             var target = document.getElementById($self.getAttribute('data-clipboard-target-id'));
-            if (!target) {
-                if ($self.getAttribute && $self.getAttribute('class').includes('copier-after')) {
-                    target = $self.previousSibling;
-                } else if ($self.getAttribute && $self.getAttribute('class').includes('copier-before')) {
-                    target = $self.nextSibling;
-                } else if ($self.getAttribute && $self.getAttribute('class').includes('copier-inside')) { 
-                    target = $self.parentElement;
-                }
-            }
-            // console.log(target);
+            // console.log($self, target);
             if (target) {
                 copyToClipboard(target);
             }
         }
     });
-}); // */
+}
+
+jQuery(document).ready(enableCopyToClipboard());

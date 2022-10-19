@@ -14,6 +14,8 @@ function activateLoadInline() {
     jQuery("a.inline-answers").parents('tr').click(function(e) {
         doLoadInline(jQuery('td a.actionlink', this), e);
     });
+
+    enableCopyToClipboard();   
 }
 
 function doLoadInline (currentItem, event) {
