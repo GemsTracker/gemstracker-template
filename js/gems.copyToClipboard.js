@@ -46,8 +46,8 @@ function enableCopyToClipboard() {
         }
         if (navigator.clipboard.write) {
             data = createClipboardItem({
-                "text/plain": text,
-                "text/html": html
+                "text/html": html,
+                "text/plain": text
             });
             navigator.clipboard.write([data]).then(function() {
                 console.log('Async: Copying to clipboard was successful!');
